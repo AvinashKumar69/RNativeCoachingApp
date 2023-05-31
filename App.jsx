@@ -5,22 +5,27 @@
  * @format
  */
 
-import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import React from 'react';
+import {StyleSheet, Text} from 'react-native';
+import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import {RootNavigation} from './src/navigation';
 
 function App() {
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: 'tomato',
+      secondary: 'yellow',
+    },
+  };
+
   return (
     <NavigationContainer>
-      <SafeAreaView style={styles.topContainer}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsVerticalScrollIndicator={false}>
-          <View>
-            <Text>App</Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <PaperProvider theme={theme}>
+        <RootNavigation />
+      </PaperProvider>
     </NavigationContainer>
   );
 }
