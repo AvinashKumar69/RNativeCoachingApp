@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {addNoteToDB} from '../../queries/notesQuery';
 import {addNote} from '../../redux/features/notesSlice';
 
 const Notes = () => {
@@ -24,13 +25,17 @@ const Notes = () => {
 
   const addNoteHandler = () => {
     if (noteTitle.length !== 0 && noteDescription.length !== 0) {
-      dispatch(
-        addNote({...notes, noteId: Math.floor(Math.random() * 1000000)}),
-      ); // dispatching to redux
-      setNotes({
-        noteTitle: '',
-        noteDescription: '',
-      });
+      const note = {...notes, noteId: Math.floor(Math.random() * 1000000)};
+      addNoteToDB(note)
+        .then(() => {
+          console.log('note added to db');
+          dispatch(addNote(note)); // dispatching to redux
+          setNotes({
+            noteTitle: '',
+            noteDescription: '',
+          });
+        })
+        .catch(error => console.error('error adding note to db', error));
     }
   };
 

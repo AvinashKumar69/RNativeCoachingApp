@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "978978301889",
+    "project_id": "rnativecoachingapp",
+    "storage_bucket": "rnativecoachingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978978301889:android:6fe46dfe3dc2e8f1d63140",
+        "android_client_info": {
+          "package_name": "com.rnativecoachingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUnPCw7Fqnn6WRn583xFfkpC1n4iCutTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
