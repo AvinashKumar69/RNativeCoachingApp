@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import About from '../screens/MainStack/About';
 import Contact from '../screens/MainStack/Contact';
 import Home from '../screens/MainStack/Home';
+import Notes from '../screens/MainStack/Notes';
 
 const MainStack = () => {
   const Tab = createBottomTabNavigator();
@@ -30,6 +31,8 @@ const MainStack = () => {
             iconName = focused ? 'home' : 'home-outline';
           else if (route.name === 'Contact')
             iconName = focused ? 'email-send' : 'email-send-outline';
+          else if (route.name === 'Notes')
+            iconName = focused ? 'notebook' : 'notebook-outline';
 
           return (
             <MaterialCommunityIcons name={iconName} size={size} color={color} />
@@ -46,6 +49,7 @@ const MainStack = () => {
       <Tab.Screen name="About" component={About} />
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Contact" component={Contact} />
+      <Tab.Screen name="Notes" component={Notes} />
     </Tab.Navigator>
   );
 };
