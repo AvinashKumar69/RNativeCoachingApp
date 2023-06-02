@@ -1,48 +1,46 @@
-import auth from '@react-native-firebase/auth';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
-import React, {useEffect, useState} from 'react';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
+import {
+  addAdditionalUserInfoToDB,
+  addUserToDB,
+  onGoogleButtonPress,
+} from '../../queries/loginQuery';
+
 const Login = () => {
-  GoogleSignin.configure({
-    webClientId:
-      '978978301889-7h8oca0terlmk3iupt5f087ljf68iqjt.apps.googleusercontent.com',
-  });
-
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-
-    // Get the users ID token
-    const userInfo = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(
-      userInfo?.idToken,
-    );
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  }
+  const googleSignInHandler = () => {
+    onGoogleButtonPress()
+      .then(userDetails => {
+        // console.log('Signed in with Google!', userDetails);
+        const u1 = userDetails?.additionalUserInfo?.profile;
+        const u2 = userDetails?.user;
+        //
+        const additionalUserInfo = {
+          email: u1?.email,
+          email_verified: u1?.email_verified,
+          name: u1?.name,
+          picture: u1?.picture,
+          uid: u2?.uid,
+          isAnonymous: u2?.isAnonymous,
+          displayName: u2?.displayName,
+        };
+        addUserToDB(additionalUserInfo, u2?.uid).then(() => {
+          console.log('user1 added');
+          //
+          const userInfo = {
+            emailVerified: u2?.emailVerified,
+            phoneNumber: u2?.phoneNumber,
+            photoURL: u2?.photoURL,
+            metadata: u2?.metadata,
+          };
+          addAdditionalUserInfoToDB(userInfo, u2?.uid).then(() => {
+            console.log('user2 added');
+          });
+        });
+      })
+      .catch(error => console.error(error));
+  };
 
   return (
     <View style={styles.topContainer}>
@@ -50,11 +48,7 @@ const Login = () => {
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         style={styles.googleSignInButton}
-        onPress={() =>
-          onGoogleButtonPress().then(additionalUserInfo =>
-            console.log('Signed in with Google!', additionalUserInfo),
-          )
-        }
+        onPress={googleSignInHandler}
       />
     </View>
   );
