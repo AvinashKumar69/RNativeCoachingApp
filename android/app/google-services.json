@@ -12,7 +12,20 @@
           "package_name": "com.rnativecoachingapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "978978301889-dk28d22ib0gmj92atjjee97haksml8vb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnativecoachingapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "978978301889-7h8oca0terlmk3iupt5f087ljf68iqjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBUnPCw7Fqnn6WRn583xFfkpC1n4iCutTk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978978301889-7h8oca0terlmk3iupt5f087ljf68iqjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
