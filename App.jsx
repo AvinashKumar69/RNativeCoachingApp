@@ -7,11 +7,14 @@
 
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider as ReduxProvider} from 'react-redux';
+
 import {RootNavigation} from './src/navigation';
 import store from './src/redux/store';
-import { Provider as ReduxProvider} from 'react-redux';
+import {AuthenticationContextProvider} from './src/services/AuthContext';
 
 function App() {
   const theme = {
@@ -24,13 +27,17 @@ function App() {
   };
 
   return (
-    <NavigationContainer>
-      <PaperProvider theme={theme}>
-        <ReduxProvider store={store}>
-          <RootNavigation />
-        </ReduxProvider>
-      </PaperProvider>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <ReduxProvider store={store}>
+        <AuthenticationContextProvider>
+          <NavigationContainer>
+            <PaperProvider theme={theme}>
+              <RootNavigation />
+            </PaperProvider>
+          </NavigationContainer>
+        </AuthenticationContextProvider>
+      </ReduxProvider>
+    </SafeAreaProvider>
   );
 }
 

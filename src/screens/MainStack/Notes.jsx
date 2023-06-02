@@ -50,7 +50,7 @@ const Notes = () => {
         activeOutlineColor="#273a94"
         maxLength={50}
         value={noteTitle}
-        left={<TextInput.Icon icon="notebook" />}
+        left={<TextInput.Icon icon="notebook-plus" iconColor="#273a94" />}
         onChangeText={value => onChangeTextHandler('noteTitle', value)}
       />
 
@@ -64,7 +64,7 @@ const Notes = () => {
         multiline={true}
         maxLength={500}
         value={noteDescription}
-        left={<TextInput.Icon icon="notebook" />}
+        left={<TextInput.Icon icon="notebook-plus" iconColor="#273a94" />}
         onChangeText={value => onChangeTextHandler('noteDescription', value)}
       />
 
