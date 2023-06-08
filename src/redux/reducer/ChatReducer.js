@@ -1,15 +1,17 @@
 import {
-  ALLCONSUMERCHATMESSAGESBULK,
   ALLCONSUMERCHATMESSAGES,
-  CHAT,
+  ALLCONSUMERCHATMESSAGESBULK,
+  CHATLISTADDER,
   CHATRESET,
   CONSUMERCHATSEENUPDATED,
   CONSUMERUPDATEDMESSAGE,
+  OTHERUSERSDETAIL,
 } from '../action/ChatAction';
 
 const initialState = {
   chatDetail: {},
   allConsumerChatMessages: {},
+  chatListOtherUsersDetail: {},
 };
 
 const chatReducer = (store = initialState, action) => {
@@ -77,9 +79,9 @@ const chatReducer = (store = initialState, action) => {
           },
         };
       }
-    case CHAT:
+
+    case CHATLISTADDER:
       [chatId, data, ourId, otherId] = action.payload;
-      console.log('data @ chatReducer-->', data);
       return {
         ...store,
         chatDetail: {
@@ -92,10 +94,24 @@ const chatReducer = (store = initialState, action) => {
           },
         },
       };
+
+    case OTHERUSERSDETAIL:
+      // console.log('action.payload-->', action.payload);
+      otherId = action.payload.uid;
+      data = action.payload;
+      return {
+        ...store,
+        chatListOtherUsersDetail: {
+          ...store.chatListOtherUsersDetail,
+          [otherId]: {...data},
+        },
+      };
+
     case CHATRESET:
       return {
         ...initialState,
       };
+
     case CONSUMERCHATSEENUPDATED:
       docId = action.payload[0];
       chatId = action.payload[1];
@@ -119,6 +135,7 @@ const chatReducer = (store = initialState, action) => {
           },
         },
       };
+
     case CONSUMERUPDATEDMESSAGE:
       [chatId, docId, latestMessage] = action.payload;
       return {
@@ -130,6 +147,7 @@ const chatReducer = (store = initialState, action) => {
           },
         },
       };
+
     default:
       return store;
   }

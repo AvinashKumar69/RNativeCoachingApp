@@ -1,12 +1,14 @@
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import {getNewMessagesForChat} from '../../queries/chatQuery';
+import {getUser} from '../../queries/userQuery';
 
 export const CHATRESET = 'CHATRESET';
-export const CHAT = 'CHAT';
+export const CHATLISTADDER = 'CHATLISTADDER';
 export const ALLCONSUMERCHATMESSAGES = 'ALLCONSUMERCHATMESSAGES';
 export const ALLCONSUMERCHATMESSAGESBULK = 'ALLCONSUMERCHATMESSAGESBULK';
 export const CONSUMERCHATSEENUPDATED = 'CONSUMERCHATSEENUPDATED';
 export const CONSUMERUPDATEDMESSAGE = 'CONSUMERUPDATEDMESSAGE';
+export const OTHERUSERSDETAIL = 'OTHERUSERSDETAIL';
 
 export const allConsumerChatMessages = payload => {
   return {
@@ -14,6 +16,7 @@ export const allConsumerChatMessages = payload => {
     payload,
   };
 };
+
 export const allConsumerChatMessagesBulk = payload => {
   return {
     type: ALLCONSUMERCHATMESSAGESBULK,
@@ -21,9 +24,16 @@ export const allConsumerChatMessagesBulk = payload => {
   };
 };
 
+export const otherUsersDetail = payload => {
+  return {
+    type: OTHERUSERSDETAIL,
+    payload,
+  };
+};
+
 export const chatListAdder = payload => {
   return {
-    type: CHAT,
+    type: CHATLISTADDER,
     payload,
   };
 };
@@ -86,6 +96,20 @@ export const singleChatMessages = payload => dispatch => {
     .catch(err => {
       console.error('Error in getting messages', err);
     });
+};
+
+export const chatListOtherUsersDetail = payload => dispatch => {
+  // console.log('payload-->', payload);
+  getUser(payload)
+    .then(userDoc => {
+      if (userDoc.exists) {
+        // console.log('here it is logged==>', userDoc.data());
+        dispatch(otherUsersDetail(userDoc.data()));
+      }
+    })
+    .catch(error =>
+      console.error('Error in getting other users details:-', error),
+    );
 };
 
 export const consumerSendMessage = payload => dispatch => {

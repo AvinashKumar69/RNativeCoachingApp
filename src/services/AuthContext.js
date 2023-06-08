@@ -9,8 +9,16 @@ import {
   addUserToDB,
   onGoogleButtonPress,
 } from '../queries/loginQuery';
-import {getUser} from '../queries/userQuery';
-import {chatListAdder, singleChatMessages} from '../redux/action/ChatAction';
+import {
+  getChatListOtherUsersDetailsFromDB,
+  getUser,
+} from '../queries/userQuery';
+import {
+  chatListAdder,
+  chatListOtherUsersDetail,
+  singleChatMessages,
+} from '../redux/action/ChatAction';
+import {allOtherUsers} from '../redux/features/userSlice';
 
 export const AuthenticationContext = createContext();
 
@@ -22,45 +30,22 @@ export const AuthenticationContextProvider = ({children}) => {
 
   const dispatch = useDispatch();
   const reduxStore = useSelector(state => state);
-  // console.log('reduxStore-->',reduxStore);
+  // console.log('reduxStore==>', reduxStore.allChatDetail.chatDetail);
+  // const testArray = reduxStore?.users?.allOtherUsers?.map(item => {
+  //   console.log('item==>', item);
+  // });
+
   const subscriptions = [];
 
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null); // logged-in user details
-  // console.log('auth user==>', user);
 
   //
   const postLogin = uid => {
-    console.log('uid==>', uid);
-
-    function onResult(QuerySnapshot) {
-      console.log('Got Users collection result.', QuerySnapshot);
-    }
-
-    function onError(error) {
-      console.error(error);
-    }
-
-    // return firebase
-    //   .firestore()
-    //   .collection('allChats')
-    //   .where('parties', 'array-contains', uid)
-    //   .onSnapshot(querySnap => {
-    //     // if (!!querySnap) handler(uid, querySnap.docChanges(), isUserChat);
-    //     querySnap.docChanges().forEach(({doc}) => {
-    //       console.log('doc.data()==>', doc.data());
-    //     });
-    //     // let queryChanges = querySnap.docChanges();
-    //     // queryChanges.forEach(doc => {
-    //     //   console.log('doc,data()==>', doc.data());
-    //     // });
-    //   });
-    // .onSnapshot(onResult, onError)
-
+    // console.log('uid==>', uid);
     // ***
     const chatHandler = (ourId, queryChanges, isUserChat) => {
       const storeState = reduxStore; // to get all the redux-store states
-      // console.log('storeState==>', storeState);
       queryChanges.forEach(({doc}) => {
         const chatId = doc.id;
         const data = doc.data();
@@ -69,6 +54,8 @@ export const AuthenticationContextProvider = ({children}) => {
         const lastSent =
           isUserChat && storeState.allChatDetail?.chatDetail[otherId]?.lastSent;
         dispatch(chatListAdder([chatId, data, ourId, otherId])); // add complete chat list to redux
+
+        dispatch(chatListOtherUsersDetail(otherId)); // get other user's details
 
         dispatch(
           // particular message add for a particualr chat
@@ -81,20 +68,54 @@ export const AuthenticationContextProvider = ({children}) => {
           ]),
         );
       });
+
+      // getChatListOtherUsersDetailsFromDB(
+      //   Object.keys(storeState?.allChatDetail?.chatDetail),
+      // )
+      //   .then(querySnapshot => {
+      //     if (querySnapshot) {
+      //       querySnapshot.docChanges()?.forEach(doc => {
+      //         // console.log('doc.data()==>', doc.doc.data());
+      //         dispatch(allOtherUsers(doc.doc.data()));
+      //       });
+      //     }
+      //   })
+      //   .catch(error =>
+      //     console.error('Error in getting other users details:-', error),
+      //   );
     };
+
     // Running for Consumer Chat
     subscriptions.push(chatListener(uid, chatHandler, true));
   };
+
+  // const otherUserIdArray = Object.keys(reduxStore?.allChatDetail?.chatDetail);
+  //   console.log('otherUserIdArray==>',otherUserIdArray)
+
+  //  if (otherUserIdArray?.length!==0){
+  //   getChatListOtherUsersDetailsFromDB(
+  //     Object.keys(reduxStore?.allChatDetail?.chatDetail),
+  //   )
+  //     .then(querySnapshot => {
+  //       if (querySnapshot) {
+  //         querySnapshot.docChanges()?.forEach(doc => {
+  //            // console.log('doc.data()==>', doc.doc.data());
+  //           dispatch(allOtherUsers(doc.doc.data()));
+  //         });
+  //       }
+  //     })
+  //     .catch(error =>
+  //       console.error('Error in getting other users details:-', error),
+  //     );
+  //  }
   //
 
   const onLogin = user => {
-    // console.log('user @ onLogin ==>', user);
     postLogin(user?.uid);
   };
 
   // Handle user state changes
   const onAuthStateChanged = user => {
-    // console.log('auth-user==>', user);
     setUser(user);
     if (user) {
       onLogin(user);
@@ -114,12 +135,10 @@ export const AuthenticationContextProvider = ({children}) => {
   const googleSignInHandler = () => {
     onGoogleButtonPress()
       .then(userDetails => {
-        console.log('userDetails @ googlesignin ==>', userDetails);
         if (userDetails) {
           const uid = userDetails?.user?.uid;
           getUser(uid).then(firestoreDoc => {
             if (!firestoreDoc.exists) {
-              console.log('!firestoreDoc.exists');
               const u1 = userDetails?.additionalUserInfo?.profile;
               const u2 = userDetails?.user;
               //
