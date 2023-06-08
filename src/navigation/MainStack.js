@@ -5,8 +5,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import About from '../screens/MainStack/About';
 import Contact from '../screens/MainStack/Contact';
-import Home from '../screens/MainStack/Home';
-import Notes from '../screens/MainStack/Notes';
+import Home from '../screens/MainStack/HomeStack/Home';
+import Notes from '../screens/MainStack/HomeStack/Notes';
+import ConversationStack from './ConversationStack';
+import HomeStack from './HomeStack';
 
 const MainStack = () => {
   const Tab = createBottomTabNavigator();
@@ -27,12 +29,16 @@ const MainStack = () => {
 
           if (route.name === 'About')
             iconName = focused ? 'account' : 'account-outline';
-          else if (route.name === 'Home')
+          // else if (route.name === 'Home')
+          //   iconName = focused ? 'home' : 'home-outline';
+          // else if (route.name === 'Contact')
+          //   iconName = focused ? 'email-send' : 'email-send-outline';
+          // else if (route.name === 'Notes')
+          //   iconName = focused ? 'notebook' : 'notebook-outline';
+          else if (route.name === 'HStack')
             iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Contact')
-            iconName = focused ? 'email-send' : 'email-send-outline';
-          else if (route.name === 'Notes')
-            iconName = focused ? 'notebook' : 'notebook-outline';
+          else if (route.name === 'CStack')
+            iconName = focused ? 'chat-processing-outline' : 'chat-outline';
 
           return (
             <MaterialCommunityIcons name={iconName} size={size} color={color} />
@@ -47,9 +53,11 @@ const MainStack = () => {
       initialRouteName="Home"
       backBehavior="history">
       <Tab.Screen name="About" component={About} />
-      <Tab.Screen name="Home" component={Home} />
+      {/* <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Contact" component={Contact} />
-      <Tab.Screen name="Notes" component={Notes} />
+      <Tab.Screen name="Notes" component={Notes} /> */}
+      <Tab.Screen name="HStack" component={HomeStack} />
+      <Tab.Screen name="CStack" component={ConversationStack} />
     </Tab.Navigator>
   );
 };

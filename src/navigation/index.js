@@ -5,7 +5,7 @@ import AuthStack from './AuthStack';
 import MainStack from './MainStack';
 
 export const RootNavigation = () => {
-  const {authUser} = useContext(AuthenticationContext);
+  const {user} = useContext(AuthenticationContext);
 
-  return authUser ? <MainStack /> : <AuthStack />;
+  return user ? <MainStack /> : <AuthStack />;
 };

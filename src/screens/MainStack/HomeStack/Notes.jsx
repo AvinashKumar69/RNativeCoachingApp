@@ -3,8 +3,8 @@ import {StyleSheet, View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {addNoteToDB} from '../../queries/notesQuery';
-import {addNote} from '../../redux/features/notesSlice';
+import {addNoteToDB} from '../../../queries/notesQuery';
+import {addNote} from '../../../redux/features/notesSlice';
 
 const Notes = () => {
   const dispatch = useDispatch();
