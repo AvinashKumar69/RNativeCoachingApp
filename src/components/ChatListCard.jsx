@@ -10,6 +10,10 @@ const ChatListCard = props => {
     state => state?.allChatDetail?.chatListOtherUsersDetail,
   );
 
+  const OTHER_USER_NAME =
+    otherUsersData[chat?.otherId]?.displayName ?? 'Unknown User';
+  const LAST_MESSAGE = chat?.lastMessage;
+
   const LeftContent = props => (
     <Image
       source={
@@ -26,10 +30,10 @@ const ChatListCard = props => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => chatListCardClickHandler(chat)}>
+      onPress={() => chatListCardClickHandler(chat, OTHER_USER_NAME)}>
       <Card.Title
-        title={otherUsersData[chat?.otherId]?.displayName ?? 'Unknown User'}
-        subtitle={chat?.lastMessage}
+        title={OTHER_USER_NAME}
+        subtitle={LAST_MESSAGE}
         //
         titleNumberOfLines={1}
         subtitleNumberOfLines={1}
@@ -39,7 +43,7 @@ const ChatListCard = props => {
         //
         left={LeftContent}
       />
-      <Divider/>
+      <Divider />
     </TouchableOpacity>
   );
 };

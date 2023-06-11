@@ -4,9 +4,6 @@ import {StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import About from '../screens/MainStack/About';
-import Contact from '../screens/MainStack/Contact';
-import Home from '../screens/MainStack/HomeStack/Home';
-import Notes from '../screens/MainStack/HomeStack/Notes';
 import ConversationStack from './ConversationStack';
 import HomeStack from './HomeStack';
 
@@ -29,15 +26,9 @@ const MainStack = () => {
 
           if (route.name === 'About')
             iconName = focused ? 'account' : 'account-outline';
-          // else if (route.name === 'Home')
-          //   iconName = focused ? 'home' : 'home-outline';
-          // else if (route.name === 'Contact')
-          //   iconName = focused ? 'email-send' : 'email-send-outline';
-          // else if (route.name === 'Notes')
-          //   iconName = focused ? 'notebook' : 'notebook-outline';
-          else if (route.name === 'HStack')
+          else if (route.name === 'HOME')
             iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'CStack')
+          else if (route.name === 'Chat')
             iconName = focused ? 'chat-processing-outline' : 'chat-outline';
 
           return (
@@ -53,11 +44,8 @@ const MainStack = () => {
       initialRouteName="Home"
       backBehavior="history">
       <Tab.Screen name="About" component={About} />
-      {/* <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Contact" component={Contact} />
-      <Tab.Screen name="Notes" component={Notes} /> */}
-      <Tab.Screen name="HStack" component={HomeStack} />
-      <Tab.Screen name="CStack" component={ConversationStack} />
+      <Tab.Screen name="HOME" component={HomeStack} />
+      <Tab.Screen name="Chat" component={ConversationStack} />
     </Tab.Navigator>
   );
 };

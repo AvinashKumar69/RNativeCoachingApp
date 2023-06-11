@@ -13,9 +13,9 @@ const ChatList = () => {
     (a, b) => b?.lastSent - a?.lastSent,
   );
 
-  const chatListCardClickHandler = chat => {
+  const chatListCardClickHandler = (chat, OTHER_USER_NAME) => {
     navigation.navigate('Chat', {
-      name: chat?.docId,
+      name: OTHER_USER_NAME,
       otherId: chat?.otherId,
       ourId: chat?.ourId,
       docId: chat?.docId,
