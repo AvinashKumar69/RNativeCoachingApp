@@ -9,16 +9,12 @@ import {
   addUserToDB,
   onGoogleButtonPress,
 } from '../queries/loginQuery';
-import {
-  getChatListOtherUsersDetailsFromDB,
-  getUser,
-} from '../queries/userQuery';
+import {getUser} from '../queries/userQuery';
 import {
   chatListAdder,
   chatListOtherUsersDetail,
   singleChatMessages,
 } from '../redux/action/ChatAction';
-import {allOtherUsers} from '../redux/features/userSlice';
 
 export const AuthenticationContext = createContext();
 
@@ -29,12 +25,7 @@ export const AuthenticationContextProvider = ({children}) => {
   });
 
   const dispatch = useDispatch();
-  const reduxStore = useSelector(state => state);
-  // console.log('reduxStore==>', reduxStore.allChatDetail.chatDetail);
-  // const testArray = reduxStore?.users?.allOtherUsers?.map(item => {
-  //   console.log('item==>', item);
-  // });
-
+  const reduxStore = useSelector(state => state); // to get all the redux-store states
   const subscriptions = [];
 
   const [initializing, setInitializing] = useState(true);
@@ -42,10 +33,9 @@ export const AuthenticationContextProvider = ({children}) => {
 
   //
   const postLogin = uid => {
-    // console.log('uid==>', uid);
     // ***
     const chatHandler = (ourId, queryChanges, isUserChat) => {
-      const storeState = reduxStore; // to get all the redux-store states
+      const storeState = reduxStore;
       queryChanges.forEach(({doc}) => {
         const chatId = doc.id;
         const data = doc.data();
@@ -53,12 +43,15 @@ export const AuthenticationContextProvider = ({children}) => {
         const otherId = arr.filter(id => id !== ourId)[0];
         const lastSent =
           isUserChat && storeState.allChatDetail?.chatDetail[otherId]?.lastSent;
-        dispatch(chatListAdder([chatId, data, ourId, otherId])); // add complete chat list to redux
 
-        dispatch(chatListOtherUsersDetail(otherId)); // get other user's details
+        // add complete chat list to redux
+        dispatch(chatListAdder([chatId, data, ourId, otherId]));
 
+        // get chat list user's details
+        dispatch(chatListOtherUsersDetail(otherId));
+
+        // particular message add for a particualr chat
         dispatch(
-          // particular message add for a particualr chat
           singleChatMessages([
             chatId,
             isUserChat,
@@ -68,47 +61,11 @@ export const AuthenticationContextProvider = ({children}) => {
           ]),
         );
       });
-
-      // getChatListOtherUsersDetailsFromDB(
-      //   Object.keys(storeState?.allChatDetail?.chatDetail),
-      // )
-      //   .then(querySnapshot => {
-      //     if (querySnapshot) {
-      //       querySnapshot.docChanges()?.forEach(doc => {
-      //         // console.log('doc.data()==>', doc.doc.data());
-      //         dispatch(allOtherUsers(doc.doc.data()));
-      //       });
-      //     }
-      //   })
-      //   .catch(error =>
-      //     console.error('Error in getting other users details:-', error),
-      //   );
     };
 
     // Running for Consumer Chat
     subscriptions.push(chatListener(uid, chatHandler, true));
   };
-
-  // const otherUserIdArray = Object.keys(reduxStore?.allChatDetail?.chatDetail);
-  //   console.log('otherUserIdArray==>',otherUserIdArray)
-
-  //  if (otherUserIdArray?.length!==0){
-  //   getChatListOtherUsersDetailsFromDB(
-  //     Object.keys(reduxStore?.allChatDetail?.chatDetail),
-  //   )
-  //     .then(querySnapshot => {
-  //       if (querySnapshot) {
-  //         querySnapshot.docChanges()?.forEach(doc => {
-  //            // console.log('doc.data()==>', doc.doc.data());
-  //           dispatch(allOtherUsers(doc.doc.data()));
-  //         });
-  //       }
-  //     })
-  //     .catch(error =>
-  //       console.error('Error in getting other users details:-', error),
-  //     );
-  //  }
-  //
 
   const onLogin = user => {
     postLogin(user?.uid);

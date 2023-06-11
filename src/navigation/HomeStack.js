@@ -15,7 +15,7 @@ const HomeStack = () => {
           backgroundColor: '#fafafa',
         },
         headerTitleAlign: 'center',
-        headerShown: true,
+        headerShown: false,
       }}>
       <HStack.Screen
         name="Home"
