@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Avatar} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
 import ChatListCard from '../../../components/ChatListCard';
@@ -22,6 +23,15 @@ const ChatList = () => {
     });
   };
 
+  const EmptyComponent = () => {
+    return (
+      <View style={styles.emptyComponentContainer}>
+        <Avatar.Icon size={50} icon="account-multiple" />
+        <Text style={styles.emptyComponentText}>Your chat list is empty.</Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -33,6 +43,7 @@ const ChatList = () => {
           />
         )}
         keyExtractor={item => String(item.docId)}
+        ListEmptyComponent={<EmptyComponent />}
       />
     </SafeAreaView>
   );
@@ -43,9 +54,21 @@ export default ChatList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginTop: StatusBar.currentHeight || 0,
-    // marginHorizontal: 5,
     paddingHorizontal: 5,
     backgroundColor: '#fafafa',
+  },
+  divider: {
+    height: 2,
+    backgroundColor: '#273a94',
+  },
+  emptyComponentContainer: {
+    backgroundColor: '#fafafa',
+    alignItems: 'center',
+    marginVertical: '20%',
+  },
+  emptyComponentText: {
+    color: '#000',
+    fontSize: 18,
+    paddingVertical: '5%',
   },
 });

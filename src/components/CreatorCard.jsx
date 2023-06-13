@@ -1,8 +1,34 @@
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import {Avatar, Button, Card} from 'react-native-paper';
+import {useSelector} from 'react-redux';
+
+import {AuthenticationContext} from '../services/AuthContext';
 
 const CreatorCard = () => {
+  const {user} = useContext(AuthenticationContext);
+  const allChatDetail = useSelector(state => state?.allChatDetail);
+  const navigation = useNavigation();
+
+  const creatorID = 'N4ggJKkS3fFr3aldhpWG'; // TODO: creatorId for the creator needs to be decided
+  const otherUsersData = allChatDetail?.chatListOtherUsersDetail;
+  const chatData = allChatDetail.chatDetail;
+
+  const creatorChatHandler = () => {
+    navigation.navigate('ConversationStack', {
+      screen: 'Chat',
+      params: {
+        otherId: creatorID,
+        ourId: user?.uid,
+        docId:
+          otherUsersData[creatorID] === undefined
+            ? undefined
+            : chatData[creatorID]?.docId,
+      },
+    });
+  };
+
   const LeftContent = props => <Avatar.Icon {...props} icon="code-tags" />;
 
   return (
@@ -35,7 +61,7 @@ const CreatorCard = () => {
         <Button onPress={() => console.log('pressed1')} style={styles.button}>
           View Profile
         </Button>
-        <Button onPress={() => console.log('pressed2')} style={styles.button}>
+        <Button onPress={creatorChatHandler} style={styles.button}>
           Chat with Me
         </Button>
       </Card.Actions>

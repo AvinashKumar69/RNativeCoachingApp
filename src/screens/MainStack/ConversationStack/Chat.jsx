@@ -9,7 +9,7 @@ import {AuthenticationContext} from '../../../services/AuthContext';
 
 const Chat = ({route, navigation}) => {
   const {otherId, ourId, docId} = route.params;
-  console.log('params @ chat-->', route.params);
+  // console.log('params @ chat-->', route.params);
 
   const {user} = useContext(AuthenticationContext);
   let allMessages = {};
@@ -18,7 +18,7 @@ const Chat = ({route, navigation}) => {
   );
 
   const [chatId, setChatId] = useState(docId);
-  console.log('chatid==>', chatId);
+  // console.log('chatid==>', chatId);
   const [customText, setCustomText] = useState('');
 
   const onChangeInputText = text => {
@@ -45,7 +45,7 @@ const Chat = ({route, navigation}) => {
           parties: firestore.FieldValue.arrayUnion(otherId, ourId),
         })
         .then(d => {
-          console.log('d,id==>', d.id);
+          console.log('d.id==>', d.id);
           setChatId(d.id);
           chatRef.doc(d.id).collection('message').add(mymsg);
         });

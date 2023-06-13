@@ -26,9 +26,9 @@ const MainStack = () => {
 
           if (route.name === 'About')
             iconName = focused ? 'account' : 'account-outline';
-          else if (route.name === 'HOME')
+          else if (route.name === 'HomeStack')
             iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Chat')
+          else if (route.name === 'ConversationStack')
             iconName = focused ? 'chat-processing-outline' : 'chat-outline';
 
           return (
@@ -37,15 +37,15 @@ const MainStack = () => {
         },
         tabBarActiveTintColor: '#fafafa',
         tabBarInactiveTintColor: '#808080',
-        tabBarShowLabel: true,
+        tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
       })}
       detachInactiveScreens={true}
-      initialRouteName="Home"
+      initialRouteName="ConversationStack"
       backBehavior="history">
       <Tab.Screen name="About" component={About} />
-      <Tab.Screen name="HOME" component={HomeStack} />
-      <Tab.Screen name="Chat" component={ConversationStack} />
+      <Tab.Screen name="HomeStack" component={HomeStack} />
+      <Tab.Screen name="ConversationStack" component={ConversationStack} />
     </Tab.Navigator>
   );
 };
